@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public abstract class MovingObject : MonoBehaviour
+public abstract class MovingObject : MonoBehaviour, IDestructible
 {
 
     protected Rigidbody2D rb;
@@ -12,6 +12,7 @@ public abstract class MovingObject : MonoBehaviour
     Vector2 gameDimensions;
     Camera cam;
 
+    public event Action OnDestroy;
 
     virtual protected void Awake()
     {
@@ -27,6 +28,15 @@ public abstract class MovingObject : MonoBehaviour
 
     virtual protected void Update()
     {
+        
+    }
+    virtual protected void FixedUpdate()
+    {
+        HandleEdgeTeleportation();
+    }
+
+    private void HandleEdgeTeleportation()
+    {
         Vector2 pos = transform.position;
         //Debug.Log($"x : {pos.x}, y : {pos.y}");
         if (pos.x > gameDimensions.x) pos.x = -gameDimensions.x;
@@ -37,9 +47,11 @@ public abstract class MovingObject : MonoBehaviour
         transform.position = pos;
     }
 
-    virtual protected void FixedUpdate()
+    public virtual void Destruct()
     {
-        
+        //VFX,SFX in children if needed
+        OnDestroy?.Invoke();
+        Destroy(gameObject);
     }
 }
 

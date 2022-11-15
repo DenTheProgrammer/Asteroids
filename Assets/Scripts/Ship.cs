@@ -3,15 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider2D))]
 public class Ship : MovingObject
 {
     [SerializeField]
-    float speed = 1f;
-    float turningSpeed = 20f;
+    float speed = 5f;
+    [SerializeField]
+    float turningSpeed = 0.06f;
+
     bool thrust = false;
 
-    public event Action onThrust;
-    public event Action onShot;
+    public event Action OnThrust;
+    public event Action OnFire;
+    public event Action OnLazer;
 
     protected override void Awake()
     {
@@ -28,24 +32,41 @@ public class Ship : MovingObject
     protected override void Update()
     {
         base.Update();
+        HandleInput();
+        //Debug.Log(angle);
+    }
+
+    private void HandleInput()
+    {
         angle = Input.GetAxis("Horizontal");
         thrust = Input.GetAxis("Vertical") > 0;
-        //Debug.Log(angle);
+        if (Input.GetButton("Fire Bullet"))
+        {
+            OnFire?.Invoke();
+        }
+        if (Input.GetButtonDown("Fire Lazer"))
+        {
+            OnLazer?.Invoke();
+        }
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        rb.AddTorque(-angle * turningSpeed);
-        Thrust();
+
+        HandleMovement();
     }
 
-    private void Thrust()
+
+    private void HandleMovement()
     {
+        rb.AddTorque(-angle * turningSpeed);
         if (thrust)
         {
-            onThrust?.Invoke();
+            OnThrust?.Invoke();
             rb.AddForce(transform.right * speed);
         }
     }
+
+
 }
