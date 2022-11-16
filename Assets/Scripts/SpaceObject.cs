@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public abstract class MovingObject : MonoBehaviour, IDestructible
+public abstract class SpaceObject : MonoBehaviour
 {
 
     protected Rigidbody2D rb;
     protected float angle;
 
+    public event Action<SpaceObject> OnDestroy;
+
     Vector2 gameDimensions;
     Camera cam;
 
-    public event Action OnDestroy;
 
     virtual protected void Awake()
     {
@@ -23,7 +24,7 @@ public abstract class MovingObject : MonoBehaviour, IDestructible
     virtual protected void Start()
     {
         gameDimensions = cam.ViewportToWorldPoint(new Vector3(1, 1, cam.nearClipPlane));
-        Debug.Log(gameDimensions);
+        //Debug.Log(gameDimensions);
     }
 
     virtual protected void Update()
@@ -50,7 +51,7 @@ public abstract class MovingObject : MonoBehaviour, IDestructible
     public virtual void Destruct()
     {
         //VFX,SFX in children if needed
-        OnDestroy?.Invoke();
+        OnDestroy?.Invoke(this);
         Destroy(gameObject);
     }
 }

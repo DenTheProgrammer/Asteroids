@@ -40,7 +40,9 @@ public class Gun : MonoBehaviour
     {
         Rigidbody2D bulletRB = Instantiate(bulletPrefab, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
         Physics2D.IgnoreCollision(bulletRB.gameObject.GetComponent<Collider2D>(), shipCollider);
-        bulletRB.velocity = shipRB.velocity + ((Vector2)ship.transform.right.normalized * bulletInitialVelocity);
+        bulletRB.velocity = //shipRB.velocity + 
+            ((Vector2)ship.transform.right.normalized * bulletInitialVelocity);
+
     }
 
     private void FireLazer()

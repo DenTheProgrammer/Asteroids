@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class Ship : MovingObject
+public class Ship : SpaceObject
 {
     [SerializeField]
     float speed = 5f;
@@ -40,7 +40,7 @@ public class Ship : MovingObject
     {
         angle = Input.GetAxis("Horizontal");
         thrust = Input.GetAxis("Vertical") > 0;
-        if (Input.GetButton("Fire Bullet"))
+        if (Input.GetButtonDown("Fire Bullet"))
         {
             OnFire?.Invoke();
         }
