@@ -40,11 +40,11 @@ public class Ship : SpaceObject
     {
         angle = Input.GetAxis("Horizontal");
         thrust = Input.GetAxis("Vertical") > 0;
-        if (Input.GetButtonDown("Fire Bullet"))
+        if (Input.GetButton("Fire Bullet"))
         {
             OnFire?.Invoke();
         }
-        if (Input.GetButtonDown("Fire Lazer"))
+        if (Input.GetButton("Fire Lazer"))
         {
             OnLazer?.Invoke();
         }

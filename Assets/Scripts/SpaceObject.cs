@@ -9,7 +9,6 @@ public abstract class SpaceObject : MonoBehaviour
     protected Rigidbody2D rb;
     protected float angle;
 
-    public event Action<SpaceObject> OnDestroy;
 
     Vector2 gameDimensions;
     Camera cam;
@@ -48,11 +47,5 @@ public abstract class SpaceObject : MonoBehaviour
         transform.position = pos;
     }
 
-    public virtual void Destruct()
-    {
-        //VFX,SFX in children if needed
-        OnDestroy?.Invoke(this);
-        Destroy(gameObject);
-    }
 }
 

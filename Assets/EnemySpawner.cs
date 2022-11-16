@@ -20,7 +20,8 @@ public class EnemySpawner : MonoBehaviour
     {
         gm = GameManager.gameManager;
         gm.OnGameStart += SpawnInitialAsteroids;
-        
+        Asteroid.OnDestroy += SplitAsteroid;
+
     }
 
     private void SpawnInitialAsteroids()
@@ -36,9 +37,8 @@ public class EnemySpawner : MonoBehaviour
         }
 
     }
-    private void SplitAsteroid(SpaceObject ast)
+    private void SplitAsteroid(Asteroid asteroid)
     {
-        Asteroid asteroid = (Asteroid)ast;
         if (asteroid.size != Asteroid.Size.Small)
         {
             for (int i = 0; i < 2; i++)
@@ -61,6 +61,13 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    private GameObject SpawnUFO(Vector2 pos, Quaternion rotation)
+    {
+        GameObject ufo = Instantiate(ufoPrefab, pos, rotation);
+
+        return ufo;
+    }
+
 
     private GameObject SpawnAsteroid(Asteroid.Size size, Vector2 pos, Quaternion rotation, Vector2 initSpeed)
     {
@@ -71,7 +78,7 @@ public class EnemySpawner : MonoBehaviour
         Rigidbody2D asteroidRB = asteroid.GetComponent<Rigidbody2D>();
         asteroidRB.velocity = initSpeed;
 
-        asteroidClass.OnDestroy += SplitAsteroid;
+        
         return asteroid;
     }
 

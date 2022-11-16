@@ -35,19 +35,27 @@ public class Gun : MonoBehaviour
         ship.OnFire += FireBullet;
         ship.OnLazer += FireLazer;
         lastBulletShot = DateTime.Now;
+        lastLazerShot = DateTime.Now;
     }
     private void FireBullet()
     {
+        if ((DateTime.Now - lastBulletShot).TotalMilliseconds < bulletCooldownMs) return;
+
         Rigidbody2D bulletRB = Instantiate(bulletPrefab, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
         Physics2D.IgnoreCollision(bulletRB.gameObject.GetComponent<Collider2D>(), shipCollider);
         bulletRB.velocity = //shipRB.velocity + 
             ((Vector2)ship.transform.right.normalized * bulletInitialVelocity);
+        lastBulletShot = DateTime.Now;
 
     }
 
     private void FireLazer()
     {
-        throw new NotImplementedException();
+        if ((DateTime.Now - lastLazerShot).TotalMilliseconds < lazerCooldownMs) return;
+
+        Rigidbody2D lazerRB = Instantiate(lazerPrefab, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
+        Physics2D.IgnoreCollision(lazerRB.gameObject.GetComponent<Collider2D>(), shipCollider);
+        lastLazerShot = DateTime.Now;
     }
 
 

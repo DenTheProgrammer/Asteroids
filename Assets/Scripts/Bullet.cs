@@ -11,6 +11,9 @@ public class Bullet : SpaceObject
 
     private DateTime firedAt;
     private int remainingTimeMs;
+
+
+    public static event Action OnDestroy;
     protected override void Awake()
     {
         base.Awake();
@@ -27,8 +30,14 @@ public class Bullet : SpaceObject
     {
         if (remainingTimeMs <= (DateTime.Now - firedAt).TotalMilliseconds)
         {
-            Destruct();
+            Die();
         }
+    }
+
+    public void Die()
+    {
+        OnDestroy?.Invoke();
+        Destroy(gameObject);
     }
 
     protected override void FixedUpdate()

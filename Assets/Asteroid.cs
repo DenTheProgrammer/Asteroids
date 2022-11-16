@@ -10,15 +10,26 @@ public class Asteroid : SpaceObject
 {
     public Size size;
 
+    public static event Action<Asteroid> OnDestroy;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Bullet bullet;
-        if (collision.gameObject.TryGetComponent<Bullet>(out bullet))
+        if (collision.gameObject.TryGetComponent(out Bullet bullet))
         {
-            bullet.Destruct();
-            Destruct();
+            bullet.Die();
+            Die();
+        }else if (collision.gameObject.TryGetComponent(out Lazer lazer))
+        {
+            Die();
         }
     }
+
+    private void Die()
+    {
+        OnDestroy?.Invoke(this);
+        Destroy(gameObject);
+    }
+
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -38,11 +49,6 @@ public class Asteroid : SpaceObject
         base.Update();
     }
 
-    public override void Destruct()
-    {
-        Debug.Log("OnDestruct");
-        base.Destruct();
-    }
 
     public enum Size
     {
