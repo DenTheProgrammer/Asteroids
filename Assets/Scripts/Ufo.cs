@@ -5,23 +5,25 @@ using UnityEngine;
 
 public class Ufo : MonoBehaviour
 {
-
-    [SerializeField]
-    private Transform playerTransform;
     [SerializeField]
     private float speedMult;
+    private Transform playerTransform;
 
 
-    public static event Action<Ufo> OnDestruction;
+    public static event Action<Ufo> OnDestroy;
     private Rigidbody2D rb;
     void Start()
     {
+        playerTransform = FindObjectOfType<Ship>().transform;
         rb = GetComponent<Rigidbody2D>();
     }
 
     private void FixedUpdate()
     {
-        rb.AddForce((playerTransform.position - transform.position) * speedMult);
+        if (playerTransform != null)
+        {
+            rb.AddForce((playerTransform.position - transform.position) * speedMult);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -39,7 +41,7 @@ public class Ufo : MonoBehaviour
 
     private void Die()
     {
-        OnDestruction?.Invoke(this);
+        OnDestroy?.Invoke(this);
         Destroy(gameObject);
     }
 }

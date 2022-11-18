@@ -3,30 +3,62 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class ObjectSpawner : MonoBehaviour
 {
     [SerializeField]
     private GameObject asteroidPrefab;
     [SerializeField]
     private GameObject ufoPrefab;
     [SerializeField]
+    private GameObject playerPrefab;
+    [SerializeField]
     private int startAsteroidCount;
+    [SerializeField]
+    private int ScoreToSpawnUfo;
+    [SerializeField]
+    public static List<GameObject> aliveEnemies;
 
-    private GameManager gm;
+
+    private int scoreSinceLastUFO;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        gm = GameManager.gameManager;
-        gm.OnGameStart += SpawnInitialAsteroids;
+        GameManager.OnGameStart += SpawnPlayer;
+        GameManager.OnScoreUpdate += CheckUfoCondition;
+        GameManager.OnNextLvl += GenerateLevel;
+        aliveEnemies = new List<GameObject>();
         Asteroid.OnDestroy += SplitAsteroid;
-
+        Ufo.OnDestroy += RemoveUfoFromList;
     }
 
-    private void SpawnInitialAsteroids()
+
+    private void SpawnPlayer()
     {
-        for (int i = 0; i < startAsteroidCount; i++)
+        Instantiate(playerPrefab, new Vector2(0, 0), Quaternion.identity);
+    }
+    private void CheckUfoCondition(int addedScore, int totalScore)
+    {
+        scoreSinceLastUFO += addedScore;
+
+        if (scoreSinceLastUFO >= ScoreToSpawnUfo)
+        {
+            scoreSinceLastUFO -= ScoreToSpawnUfo;
+            SpawnUFO();
+        }
+    }
+
+    private void RemoveUfoFromList(Ufo ufo)
+    {
+        aliveEnemies.Remove(ufo.gameObject);
+    }
+
+
+    private void GenerateLevel(int difficulty)
+    {
+        ClearLevel();
+        for (int i = 0; i < startAsteroidCount + difficulty; i++)
         {
             Vector2 randDirection = UnityEngine.Random.insideUnitCircle.normalized;
             float randDist = UnityEngine.Random.Range(3, 8);
@@ -35,7 +67,6 @@ public class EnemySpawner : MonoBehaviour
 
             SpawnAsteroid(Asteroid.Size.Large, randDist * randDirection, Quaternion.identity, velocity);
         }
-
     }
     private void SplitAsteroid(Asteroid asteroid)
     {
@@ -59,12 +90,17 @@ public class EnemySpawner : MonoBehaviour
                 }
             }
         }
+        aliveEnemies.Remove(asteroid.gameObject);
     }
 
-    private GameObject SpawnUFO(Vector2 pos, Quaternion rotation)
+    private GameObject SpawnUFO()
     {
-        GameObject ufo = Instantiate(ufoPrefab, pos, rotation);
+        Vector2 randDirection = UnityEngine.Random.insideUnitCircle.normalized;
+        float randDist = UnityEngine.Random.Range(9, 10);
 
+        GameObject ufo = Instantiate(ufoPrefab, randDirection*randDist, Quaternion.identity);
+
+        aliveEnemies.Add(ufo);
         return ufo;
     }
 
@@ -78,13 +114,21 @@ public class EnemySpawner : MonoBehaviour
         Rigidbody2D asteroidRB = asteroid.GetComponent<Rigidbody2D>();
         asteroidRB.velocity = initSpeed;
 
-        
+        aliveEnemies.Add(asteroid);
         return asteroid;
+    }
+
+    private void ClearLevel()
+    {
+        foreach (var enemy in aliveEnemies)
+        {
+            Destroy(enemy);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //Debug.Log($"Alive enemies count: {aliveEnemies.Count}");
     }
 }

@@ -20,22 +20,30 @@ public class Gun : MonoBehaviour
     private float bulletInitialVelocity;
     [SerializeField]
     private int lazerCooldownMs;
+    [SerializeField]
+    private int lazerMaxShots;
+    private int lazerShotsLeft;
 
+    private DateTime lazerReloadStart;
+    private bool lazerIsReloading;
 
     private DateTime lastBulletShot;
-    private DateTime lastLazerShot;
+
+    public static event Action<float, int> OnLazerUpdate;// %of load and current count
+
 
     private Rigidbody2D shipRB;
     private Collider2D shipCollider;
 
     void Start()
     {
+        lazerIsReloading = false;
         shipRB = ship.GetComponent<Rigidbody2D>();
         shipCollider = ship.GetComponent<Collider2D>();
-        ship.OnFire += FireBullet;
-        ship.OnLazer += FireLazer;
+        Ship.OnFire += FireBullet;
+        Ship.OnLazer += FireLazer;
         lastBulletShot = DateTime.Now;
-        lastLazerShot = DateTime.Now;
+        lazerShotsLeft = lazerMaxShots;
     }
     private void FireBullet()
     {
@@ -51,17 +59,46 @@ public class Gun : MonoBehaviour
 
     private void FireLazer()
     {
-        if ((DateTime.Now - lastLazerShot).TotalMilliseconds < lazerCooldownMs) return;
+        if (lazerShotsLeft == 0) return;
 
         Rigidbody2D lazerRB = Instantiate(lazerPrefab, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
         Physics2D.IgnoreCollision(lazerRB.gameObject.GetComponent<Collider2D>(), shipCollider);
-        lastLazerShot = DateTime.Now;
+        lazerShotsLeft--;
     }
+
+    
 
 
     // Update is called once per frame
     void Update()
     {
-        
+        UpdateLazer();
+    }
+
+    private void UpdateLazer()
+    {
+        if (lazerIsReloading)
+        {
+            if ((DateTime.Now - lazerReloadStart).TotalMilliseconds >= lazerCooldownMs)//loaded new shot
+            {
+                lazerShotsLeft++;
+                lazerIsReloading = false;
+            }
+        }
+        else
+        {
+            if (lazerShotsLeft < lazerMaxShots)//need to load shot
+            {
+                lazerIsReloading = true;
+                lazerReloadStart = DateTime.Now;
+            }
+        }
+        OnLazerUpdate?.Invoke((float)(DateTime.Now - lazerReloadStart).TotalMilliseconds / lazerCooldownMs, lazerShotsLeft);
+    }
+
+    private void OnDestroy()
+    {
+        Ship.OnFire -= FireBullet;
+        Ship.OnLazer -= FireLazer;
     }
 }

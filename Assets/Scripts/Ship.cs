@@ -7,15 +7,18 @@ using UnityEngine;
 public class Ship : SpaceObject
 {
     [SerializeField]
-    float speed = 5f;
+    private float speed = 5f;
     [SerializeField]
-    float turningSpeed = 0.06f;
+    private float turningSpeed = 0.06f;
 
-    bool thrust = false;
+    private bool thrust = false;
 
-    public event Action OnThrust;
-    public event Action OnFire;
-    public event Action OnLazer;
+    public static event Action OnThrust;
+    public static event Action OnFire;
+    public static event Action OnLazer;
+    public static event Action OnDestroy;
+
+    public static event Action<Vector2, float, float> OnMovement;//cords, angle, speed
 
     protected override void Awake()
     {
@@ -36,6 +39,14 @@ public class Ship : SpaceObject
         //Debug.Log(angle);
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Die();
+        }
+    }
+
     private void HandleInput()
     {
         angle = Input.GetAxis("Horizontal");
@@ -44,7 +55,7 @@ public class Ship : SpaceObject
         {
             OnFire?.Invoke();
         }
-        if (Input.GetButton("Fire Lazer"))
+        if (Input.GetButtonDown("Fire Lazer"))
         {
             OnLazer?.Invoke();
         }
@@ -66,7 +77,14 @@ public class Ship : SpaceObject
             OnThrust?.Invoke();
             rb.AddForce(transform.right * speed);
         }
+
+        OnMovement?.Invoke(transform.position, transform.rotation.eulerAngles.z, rb.velocity.magnitude);
     }
 
-
+    private void Die()
+    {
+        //SFX
+        OnDestroy?.Invoke();
+        Destroy(gameObject);
+    }
 }
