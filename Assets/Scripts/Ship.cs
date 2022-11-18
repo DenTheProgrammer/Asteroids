@@ -11,8 +11,9 @@ public class Ship : SpaceObject
     [SerializeField]
     private float turningSpeed = 0.06f;
 
-    private bool thrust = false;
+    public bool thrust = false;
 
+    public static event Action OnCreate;
     public static event Action OnThrust;
     public static event Action OnFire;
     public static event Action OnLazer;
@@ -29,6 +30,7 @@ public class Ship : SpaceObject
     protected override void Start()
     {
         base.Start();
+        OnCreate?.Invoke();
     }
 
     // Update is called once per frame

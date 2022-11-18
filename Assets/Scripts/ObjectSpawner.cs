@@ -36,7 +36,7 @@ public class ObjectSpawner : MonoBehaviour
 
     private void SpawnPlayer()
     {
-        Instantiate(playerPrefab, new Vector2(0, 0), Quaternion.identity);
+        Instantiate(playerPrefab, new Vector2(0, 0), Quaternion.Euler(0,0,90));
     }
     private void CheckUfoCondition(int addedScore, int totalScore)
     {
@@ -58,7 +58,7 @@ public class ObjectSpawner : MonoBehaviour
     private void GenerateLevel(int difficulty)
     {
         ClearLevel();
-        for (int i = 0; i < startAsteroidCount + difficulty; i++)
+        for (int i = 0; i < startAsteroidCount + (difficulty - 1); i++)
         {
             Vector2 randDirection = UnityEngine.Random.insideUnitCircle.normalized;
             float randDist = UnityEngine.Random.Range(3, 8);
@@ -124,6 +124,7 @@ public class ObjectSpawner : MonoBehaviour
         {
             Destroy(enemy);
         }
+        aliveEnemies.Clear();
     }
 
     // Update is called once per frame

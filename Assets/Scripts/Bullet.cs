@@ -24,6 +24,7 @@ public class Bullet : SpaceObject
         base.Start();
         firedAt = DateTime.Now;
         remainingTimeMs = bulletLifetimeMs;
+        GameManager.OnNextLvl += (int lvl) => { Die(); };
     }
 
     protected override void Update()

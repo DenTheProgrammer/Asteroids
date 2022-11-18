@@ -78,36 +78,35 @@ public class GameManager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
                     AddScore(-_score);
-                    difficultyLvl = 1;
                     gameState = GameState.InProgress;
                     OnGameStart?.Invoke();
-                    NextLevel();
+                    SetLevel(1);
                     Debug.Log("Game is started!");
                 }
                 break;
             case GameState.InProgress:
+                //Debug.Log($"Alive enemies: {ObjectSpawner.aliveEnemies.Count}");
                 if (ObjectSpawner.aliveEnemies.Count == 0)
                 {
-                    NextLevel();
+                    SetLevel(difficultyLvl+1);
                 }
                 break;
             case GameState.GameOver:
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
                     AddScore(-_score);
-                    difficultyLvl = 1;
                     gameState = GameState.InProgress;
                     OnGameStart?.Invoke();
-                    NextLevel();
+                    SetLevel(1);
                 }
                 break;
         }
     }
 
-    private void NextLevel()
+    private void SetLevel(int lvl)
     {
-        OnNextLvl?.Invoke(difficultyLvl);
-        difficultyLvl++;
+        difficultyLvl = lvl;
+        OnNextLvl?.Invoke(lvl);
     }
 
     public enum GameState
