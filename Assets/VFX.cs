@@ -7,6 +7,8 @@ public class VFX : MonoBehaviour
 {
     [SerializeField]
     private Sprite shipBoostImg;
+    [SerializeField]
+    private ParticleSystem explosion;
 
     private SpriteRenderer shipSpriteRenderer;
     private Sprite shipImg;
@@ -14,6 +16,15 @@ public class VFX : MonoBehaviour
     void Start()
     {
         Ship.OnCreate += GetShipData;
+        Asteroid.OnDestroy += PlayExplosion;
+        Ufo.OnDestroy += PlayExplosion;
+        Ship.OnDestroy += PlayExplosion;
+    }
+
+    private void PlayExplosion(GameObject obj)
+    {
+        ParticleSystem exp = Instantiate(explosion, obj.transform.position, obj.transform.rotation);
+        exp.startColor = obj.GetComponent<SpriteRenderer>().color;
     }
 
     private void GetShipData()

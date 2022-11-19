@@ -41,19 +41,20 @@ public class GameManager : MonoBehaviour
         OnScoreUpdate?.Invoke(amount, _score);
         Debug.Log($"SCORE +{amount} | TOTAL : {_score}");
     }
-    private void EndGame()
+    private void EndGame(GameObject _)
     {
         gameState = GameState.GameOver;
         OnGameOver?.Invoke();
     }
 
-    private void ScoreUfo(Ufo ufo)
+    private void ScoreUfo(GameObject _)
     {
         AddScore(250);
     }
 
-    private void ScoreAsteroid(Asteroid asteroid)
+    private void ScoreAsteroid(GameObject asteroidGO)
     {
+        Asteroid asteroid = asteroidGO.GetComponent<Asteroid>();
         Asteroid.Size size = asteroid.size;
 
         switch (size)

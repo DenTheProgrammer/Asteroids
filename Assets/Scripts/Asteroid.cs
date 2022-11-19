@@ -10,7 +10,7 @@ public class Asteroid : SpaceObject
 {
     public Size size;
 
-    public static event Action<Asteroid> OnDestroy;
+    public static event Action<GameObject> OnDestroy;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -26,7 +26,7 @@ public class Asteroid : SpaceObject
 
     private void Die()
     {
-        OnDestroy?.Invoke(this);
+        OnDestroy?.Invoke(gameObject);
         Destroy(gameObject);
     }
 

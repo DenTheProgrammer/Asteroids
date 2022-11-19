@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class UImanager : MonoBehaviour
 {
     public GameObject startText;
+    public GameObject controls;
     public GameObject deathScreen;
     public TMP_Text score;
     public TMP_Text lvl;
@@ -23,6 +24,7 @@ public class UImanager : MonoBehaviour
     {
         GameManager.OnGameStart += () => { 
             startText.SetActive(false);
+            controls.SetActive(false);
             deathScreen.SetActive(false);
             score.gameObject.SetActive(true);
             lvl.gameObject.SetActive(true);
@@ -33,6 +35,7 @@ public class UImanager : MonoBehaviour
 
         GameManager.OnGameOver += () => {
             startText.SetActive(true);
+            controls.SetActive(true);
             deathScreen.SetActive(true);
 
             lazerProgressBar.transform.parent.gameObject.SetActive(false);

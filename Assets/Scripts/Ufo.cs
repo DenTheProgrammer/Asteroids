@@ -10,7 +10,7 @@ public class Ufo : MonoBehaviour
     private Transform playerTransform;
 
 
-    public static event Action<Ufo> OnDestroy;
+    public static event Action<GameObject> OnDestroy;
     private Rigidbody2D rb;
     void Start()
     {
@@ -41,7 +41,7 @@ public class Ufo : MonoBehaviour
 
     private void Die()
     {
-        OnDestroy?.Invoke(this);
+        OnDestroy?.Invoke(gameObject);
         Destroy(gameObject);
     }
 }

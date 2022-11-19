@@ -17,7 +17,7 @@ public class Ship : SpaceObject
     public static event Action OnThrust;
     public static event Action OnFire;
     public static event Action OnLazer;
-    public static event Action OnDestroy;
+    public static event Action<GameObject> OnDestroy;
 
     public static event Action<Vector2, float, float> OnMovement;//cords, angle, speed
 
@@ -86,7 +86,7 @@ public class Ship : SpaceObject
     private void Die()
     {
         //SFX
-        OnDestroy?.Invoke();
+        OnDestroy?.Invoke(gameObject);
         Destroy(gameObject);
     }
 }

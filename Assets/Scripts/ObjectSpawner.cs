@@ -49,9 +49,9 @@ public class ObjectSpawner : MonoBehaviour
         }
     }
 
-    private void RemoveUfoFromList(Ufo ufo)
+    private void RemoveUfoFromList(GameObject ufo)
     {
-        aliveEnemies.Remove(ufo.gameObject);
+        aliveEnemies.Remove(ufo);
     }
 
 
@@ -68,8 +68,9 @@ public class ObjectSpawner : MonoBehaviour
             SpawnAsteroid(Asteroid.Size.Large, randDist * randDirection, Quaternion.identity, velocity);
         }
     }
-    private void SplitAsteroid(Asteroid asteroid)
+    private void SplitAsteroid(GameObject asteroidGO)
     {
+        Asteroid asteroid = asteroidGO.GetComponent<Asteroid>();
         if (asteroid.size != Asteroid.Size.Small)
         {
             for (int i = 0; i < 2; i++)
