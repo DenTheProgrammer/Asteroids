@@ -10,10 +10,12 @@ public class Ufo : MonoBehaviour
     private Transform playerTransform;
 
 
+    public static event Action<GameObject> OnSpawn;
     public static event Action<GameObject> OnDestroy;
     private Rigidbody2D rb;
     void Start()
     {
+        OnSpawn?.Invoke(gameObject);
         playerTransform = FindObjectOfType<Ship>().transform;
         rb = GetComponent<Rigidbody2D>();
     }

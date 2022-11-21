@@ -284,7 +284,7 @@ MonoBehaviour:
   ship: {fileID: 6334312639707394514}
   bulletPrefab: {fileID: 2454694514362554283, guid: 3064346fbba419b448113352f6fb2b9e, type: 3}
   lazerPrefab: {fileID: 3168138828143278728, guid: 72cb715444dfbb246b482a9648b97430, type: 3}
-  bulletCooldownMs: 25
+  bulletCooldownMs: 250
   bulletInitialVelocity: 12
   lazerCooldownMs: 5000
   lazerMaxShots: 5

@@ -17,6 +17,7 @@ public class ObjectSpawner : MonoBehaviour
     private int ScoreToSpawnUfo;
     [SerializeField]
     public static List<GameObject> aliveEnemies;
+    
 
 
     private int scoreSinceLastUFO;

@@ -9,6 +9,8 @@ public class VFX : MonoBehaviour
     private Sprite shipBoostImg;
     [SerializeField]
     private ParticleSystem explosion;
+    [SerializeField]
+    private List<Sprite> asteroidVersions;
 
     private SpriteRenderer shipSpriteRenderer;
     private Sprite shipImg;
@@ -17,8 +19,15 @@ public class VFX : MonoBehaviour
     {
         Ship.OnCreate += GetShipData;
         Asteroid.OnDestroy += PlayExplosion;
+        Asteroid.OnSpawn += RandomizeAsteroidSprite;
         Ufo.OnDestroy += PlayExplosion;
         Ship.OnDestroy += PlayExplosion;
+        
+    }
+
+    private void RandomizeAsteroidSprite(GameObject asteroidGO)
+    {
+        asteroidGO.GetComponent<SpriteRenderer>().sprite = asteroidVersions[UnityEngine.Random.Range(0, asteroidVersions.Count)];
     }
 
     private void PlayExplosion(GameObject obj)
@@ -26,6 +35,7 @@ public class VFX : MonoBehaviour
         ParticleSystem exp = Instantiate(explosion, obj.transform.position, obj.transform.rotation);
         exp.startColor = obj.GetComponent<SpriteRenderer>().color;
     }
+  
 
     private void GetShipData()
     {

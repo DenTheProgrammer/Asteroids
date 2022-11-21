@@ -10,6 +10,7 @@ public class Asteroid : SpaceObject
 {
     public Size size;
 
+    public static event Action<GameObject> OnSpawn;
     public static event Action<GameObject> OnDestroy;
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -42,6 +43,7 @@ public class Asteroid : SpaceObject
     protected override void Start()
     {
         base.Start();
+        OnSpawn?.Invoke(gameObject);
     }
 
     protected override void Update()
