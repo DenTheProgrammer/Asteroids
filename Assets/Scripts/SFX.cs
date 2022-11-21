@@ -16,8 +16,6 @@ public class SFX : MonoBehaviour
     private List<AudioClip> destroyEnemy;
     [SerializeField]
     private List<AudioClip> playerDeath;
-    [SerializeField]
-    private List<AudioClip> bgMusic;
 
 
     private void PlaySound(List<AudioClip> from, float volume = 1f)
@@ -29,10 +27,10 @@ public class SFX : MonoBehaviour
     {
         Gun.OnFire += () => { PlaySound(shoot, 0.7f); };
         Gun.OnLazer += () => { PlaySound(lazer); };
-        Ufo.OnSpawn += (_) => { PlaySound(ufoSpawn); };
-        Ufo.OnDestroy += (_) => { PlaySound(destroyEnemy); };
-        Asteroid.OnDestroy += (_) => { PlaySound(destroyEnemy); };
-        Ship.OnDestroy += (_) => { PlaySound(playerDeath, 1.2f); };
+        Ufo.OnSpawn += (_) => { PlaySound(ufoSpawn, 20f); };
+        Ufo.OnDestroy += (_) => { PlaySound(destroyEnemy, 10f); };
+        Asteroid.OnDestroy += (_) => { PlaySound(destroyEnemy, 5f); };
+        Ship.OnDestroy += (_) => { PlaySound(playerDeath, 10f); };
         
     }
 

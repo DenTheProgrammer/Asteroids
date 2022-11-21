@@ -9,8 +9,11 @@ public class UImanager : MonoBehaviour
 {
     public GameObject startText;
     public GameObject controls;
+    public GameObject startScreen;
     public GameObject deathScreen;
+    public GameObject stats;
     public TMP_Text score;
+    public TMP_Text finalScore;
     public TMP_Text lvl;
 
     public TMP_Text lazerCount;
@@ -26,8 +29,8 @@ public class UImanager : MonoBehaviour
             startText.SetActive(false);
             controls.SetActive(false);
             deathScreen.SetActive(false);
-            score.gameObject.SetActive(true);
-            lvl.gameObject.SetActive(true);
+            startScreen.SetActive(false);
+            stats.SetActive(true);
             lazerProgressBar.transform.parent.gameObject.SetActive(true);
             cords.transform.parent.gameObject.SetActive(true);
         };
@@ -37,7 +40,7 @@ public class UImanager : MonoBehaviour
             startText.SetActive(true);
             controls.SetActive(true);
             deathScreen.SetActive(true);
-
+            stats.SetActive(false);
             lazerProgressBar.transform.parent.gameObject.SetActive(false);
             cords.transform.parent.gameObject.SetActive(false);
         };
@@ -69,6 +72,7 @@ public class UImanager : MonoBehaviour
     private void UpdateScoreUI(int addedScore, int totalScore)
     {
         score.text = $"{totalScore}";
+        finalScore.text = $"SCORE: {totalScore}";
     }
 
     // Update is called once per frame
