@@ -15,8 +15,8 @@ public class Ship : SpaceObject
 
     public static event Action OnCreate;
     public static event Action OnThrust;
-    public static event Action OnFire;
-    public static event Action OnLazer;
+    public static event Action OnFireButton;
+    public static event Action OnLazerButton;
     public static event Action<GameObject> OnDestroy;
 
     public static event Action<Vector2, float, float> OnMovement;//cords, angle, speed
@@ -55,11 +55,11 @@ public class Ship : SpaceObject
         thrust = Input.GetAxis("Vertical") > 0;
         if (Input.GetButton("Fire Bullet"))
         {
-            OnFire?.Invoke();
+            OnFireButton?.Invoke();
         }
         if (Input.GetButtonDown("Fire Lazer"))
         {
-            OnLazer?.Invoke();
+            OnLazerButton?.Invoke();
         }
     }
 
@@ -73,7 +73,7 @@ public class Ship : SpaceObject
 
     private void HandleMovement()
     {
-        rb.AddTorque(-angle * turningSpeed);
+        transform.Rotate(Vector3.forward, -angle * turningSpeed);
         if (thrust)
         {
             OnThrust?.Invoke();

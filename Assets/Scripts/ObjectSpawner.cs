@@ -27,6 +27,7 @@ public class ObjectSpawner : MonoBehaviour
     void Start()
     {
         GameManager.OnGameStart += SpawnPlayer;
+        GameManager.OnGameStart += ()=> { scoreSinceLastUFO = 0; };
         GameManager.OnScoreUpdate += CheckUfoCondition;
         GameManager.OnNextLvl += GenerateLevel;
         aliveEnemies = new List<GameObject>();
@@ -97,6 +98,7 @@ public class ObjectSpawner : MonoBehaviour
 
     private GameObject SpawnUFO()
     {
+        Debug.Log("Spawn ufo!!");
         Vector2 randDirection = UnityEngine.Random.insideUnitCircle.normalized;
         float randDist = UnityEngine.Random.Range(9, 10);
 

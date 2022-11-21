@@ -27,9 +27,13 @@ public class SFX : MonoBehaviour
 
     void Start()
     {
-        Ship.OnFire += () => { PlaySound(shoot, 0.1f); };
+        Gun.OnFire += () => { PlaySound(shoot, 0.7f); };
+        Gun.OnLazer += () => { PlaySound(lazer); };
         Ufo.OnSpawn += (_) => { PlaySound(ufoSpawn); };
-        Ship.OnDestroy += (_) => { PlaySound(playerDeath); };
+        Ufo.OnDestroy += (_) => { PlaySound(destroyEnemy); };
+        Asteroid.OnDestroy += (_) => { PlaySound(destroyEnemy); };
+        Ship.OnDestroy += (_) => { PlaySound(playerDeath, 1.2f); };
+        
     }
 
     // Update is called once per frame

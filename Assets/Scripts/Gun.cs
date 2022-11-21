@@ -30,6 +30,8 @@ public class Gun : MonoBehaviour
     private DateTime lastBulletShot;
 
     public static event Action<float, int> OnLazerUpdate;// %of load and current count
+    public static event Action OnFire;
+    public static event Action OnLazer;
 
 
     private Rigidbody2D shipRB;
@@ -40,8 +42,8 @@ public class Gun : MonoBehaviour
         lazerIsReloading = false;
         shipRB = ship.GetComponent<Rigidbody2D>();
         shipCollider = ship.GetComponent<Collider2D>();
-        Ship.OnFire += FireBullet;
-        Ship.OnLazer += FireLazer;
+        Ship.OnFireButton += FireBullet;
+        Ship.OnLazerButton += FireLazer;
         lastBulletShot = DateTime.Now;
         lazerShotsLeft = lazerMaxShots;
     }
@@ -54,6 +56,7 @@ public class Gun : MonoBehaviour
         bulletRB.velocity = //shipRB.velocity + 
             ((Vector2)ship.transform.right.normalized * bulletInitialVelocity);
         lastBulletShot = DateTime.Now;
+        OnFire?.Invoke();
 
     }
 
@@ -64,6 +67,7 @@ public class Gun : MonoBehaviour
         Rigidbody2D lazerRB = Instantiate(lazerPrefab, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
         Physics2D.IgnoreCollision(lazerRB.gameObject.GetComponent<Collider2D>(), shipCollider);
         lazerShotsLeft--;
+        OnLazer?.Invoke();
     }
 
     
@@ -98,7 +102,7 @@ public class Gun : MonoBehaviour
 
     private void OnDestroy()
     {
-        Ship.OnFire -= FireBullet;
-        Ship.OnLazer -= FireLazer;
+        Ship.OnFireButton -= FireBullet;
+        Ship.OnLazerButton -= FireLazer;
     }
 }
